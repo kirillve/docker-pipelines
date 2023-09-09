@@ -1,7 +1,16 @@
 FROM docker:24
 
+ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
+ENV VERIFY_CHECKSUM=false
+
 RUN apk update \
-    && apk add --no-cache docker-cli make bash git curl coreutils \
+    && apk add --no-cache docker-cli python3 py3-pip make bash git curl coreutils gettext \
+    && apk add --no-cache --virtual .docker-compose-deps python3-dev libffi-dev openssl-dev gcc libc-dev \
+    && pip3 install --upgrade pip \
+    && pip3 install --no-cache-dir awscli \
+    && apk add py3-pip jq \
+    && pip3 install yq \
+    && apk del .docker-compose-deps \
     && rm -rf /var/cache/apk/* \
     && wget -qO - https://get.helm.sh/helm-v3.12.3-linux-amd64.tar.gz | tar -xzvf - \
     && chmod +x linux-amd64/helm \

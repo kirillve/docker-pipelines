@@ -63,11 +63,9 @@ init() {
 
 case "${1}" in
   "apply")
-    init
     terraform "${@}" -input=false "${plan_cache}"
   ;;
   "destroy")
-    init
     terraform "${@}" -auto-approve
   ;;
   "fmt")
@@ -79,7 +77,6 @@ case "${1}" in
     init "${@}"
   ;;
   "plan")
-    init
     terraform "${@}" -input=false -out="${plan_cache}"
   ;;
   "plan-json")
@@ -88,7 +85,6 @@ case "${1}" in
       > "${plan_json}"
   ;;
   "validate")
-    init -backend=false
     terraform "${@}"
   ;;
   *)
